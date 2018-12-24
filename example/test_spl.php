@@ -37,8 +37,6 @@ echo 'curren node:'.$list->count()."\n";//获取节点数
 echo 'curren node:'.$list->key()."\n";//获取节点数
 var_dump($a = $list->serialize());
 
-var_dump($list->unserialize($a));
-
 $stack = new SplStack();
 $stack->push('a');
 $stack->push('c');
