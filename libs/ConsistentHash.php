@@ -9,8 +9,6 @@
 
 namespace PHPHelper\libs;
 
-use PHPHelper\helpers\HashHelper;
-
 class ConsistentHash
 {
     // 节点hash之后的圆环列表.
@@ -24,11 +22,7 @@ class ConsistentHash
 
     public function __construct($nodes = array())
     {
-        if (!empty($nodes)) {
-            foreach ($nodes as $node) {
-                $this->addNode($node);
-            }
-        }
+        $this->addNodes($nodes);
     }
 
     /**
@@ -44,11 +38,47 @@ class ConsistentHash
         }
 
         for ($i = 0; $i < $this->virtualNum; $i++) {
-            $hash = HashHelper::getHashByTime33($node . '_' . $i);
+            $hash = $this->getHash($node . '_' . $i);
             $this->ringList[$hash] = $node;
             $this->nodes[$node][] = $hash;
         }
         $this->isSort = false;
+        return $this;
+    }
+
+    /**
+     * 批量增加节点.
+     *
+     * @param $nodes
+     * @return $this|bool
+     */
+    public function addNodes($nodes)
+    {
+        if (!empty($nodes)) {
+            foreach ($nodes as $node) {
+                $this->addNode($node);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * 删除节点.
+     *
+     * @param $node
+     * @return $this|bool
+     */
+    public function removeNode($node)
+    {
+        if (!isset($this->nodes[$node])) {
+            return false;
+        }
+        foreach ($this->nodes[$node] as $hash) {
+            unset($this->ringList[$hash]);
+        }
+        unset($this->nodes[$node]);
+
         return $this;
     }
 
@@ -61,7 +91,7 @@ class ConsistentHash
     public function getNode($key)
     {
         $this->sortRingList();
-        $hashKey = HashHelper::getHashByTime33($key);
+        $hashKey = $this->getHash($key);
         $hashList = array_keys($this->ringList);
         $len = count($hashList);
         if ($len == 0) {
@@ -124,6 +154,17 @@ class ConsistentHash
     public function getNodes()
     {
         return $this->nodes;
+    }
+
+    /**
+     * 获取hash值.
+     *
+     * @param $key
+     * @return int
+     */
+    public function getHash($key)
+    {
+        return \PHPHelper\helpers\HashHelper::getHashByTime33($key);
     }
 
 }

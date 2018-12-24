@@ -31,3 +31,13 @@ for($i=0;$i<10;$i++){
     $key = $keyPrefix . ($i + 100);
     echo $key . ' hash:' . \PHPHelper\helpers\HashHelper::getHashByTime33($key) . '=> '. $hashObj->getNode($key) . "\n";
 }
+// 删除节点.
+$hashObj->removeNode($server1);
+print_r($hashObj->getRingList());
+print_r($hashObj->getNodes());
+
+$keyPrefix = 'user_';
+for($i=0;$i<10;$i++){
+    $key = $keyPrefix . ($i + 100);
+    echo $key . ' hash:' . \PHPHelper\helpers\HashHelper::getHashByTime33($key) . '=> '. $hashObj->getNode($key) . "\n";
+}
