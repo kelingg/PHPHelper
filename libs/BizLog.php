@@ -14,6 +14,9 @@ use PHPHelper\helpers\ServerHelper;
 
 /**
  * Class BizLog, 业务日志类
+ * 该业务日志类支持多种日志类型:
+ * track为跟踪日志,默认不记录,可以通过配置实现指定的categor/target/code记录日志,既方便排查问题又不会记录过多的无用日志.
+ * error和change默认会全部记录,建议保持默认,因为错误日志和数据变更日志还是很重要的,出了问题没日志很难排查.
  *
  * @package PHPHelper\libs
  */
@@ -48,6 +51,11 @@ class BizLog
     private $mod = 20;
     // 日志文件扩展名.
     private $ext = 'log';
+    // 记录所有日志的日志类型,建议保持默认.
+    private $wholeLogTypes = array(
+        self::LOG_TYPE_ERROR,
+        self::LOG_TYPE_DATA_CHANGE
+    );
     // 需要记录所有日志的category列表(主要应用于track_log,便于排查问题),如果包含'ALL',则都会记录.
     private $wholeLogCategories = array();
     // 需要记录所有日志的target列表(主要应用于track_log,便于排查问题).
@@ -231,7 +239,7 @@ class BizLog
             return false;
         }
         // 如果传入了日志类型且类型属于错误或者数据变更则记录日志.
-        if (!empty($params['type']) && in_array($params['type'], array(self::LOG_TYPE_ERROR, self::LOG_TYPE_DATA_CHANGE))) {
+        if (!empty($params['type']) && in_array($params['type'], $this->wholeLogTypes)) {
             return true;
         }
         if (!empty($this->wholeLogCategories)) {
