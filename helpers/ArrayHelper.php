@@ -63,7 +63,11 @@ class ArrayHelper
      */
     public static function arrayToJsonFormat($array)
     {
-        return StringHelper::unicodeDecode(json_encode($array));
+        if(PHP_VERSION >= '5.4.0') {
+            return json_encode($array, JSON_UNESCAPED_UNICODE);
+        } else {
+            return StringHelper::unicodeDecode(json_encode($array));
+        }
     }
 
     /**
@@ -92,15 +96,15 @@ class ArrayHelper
     /**
      * 合并重叠区间.
      *
-     * 如:[
-     *          ['start' => 5, 'end' => 10],
-     *          ['start' => 7, 'end' => 15],
-     *          ['start' => 20, 'end' => 30]
-     *    ]
-     * 返回:[
-     *          ['start' => 5, 'end' => 15],
-     *          ['start' => 20, 'end' => 30]
-     *    ]
+     * 如:array(
+     *          ('start' => 5, 'end' => 10),
+     *          ('start' => 7, 'end' => 15),
+     *          ('start' => 20, 'end' => 30)
+     *    )
+     * 返回:(
+     *          ('start' => 5, 'end' => 15),
+     *          ('start' => 20, 'end' => 30)
+     *    )
      *
      * @param array $rangeList
      * @return array

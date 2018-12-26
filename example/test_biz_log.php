@@ -24,6 +24,7 @@ $configs = array(
         'isEnable' => true,
         'dir' => '/home/logs/biz_log/user_info',
         'mod' => 5,
+        'formatCode' => 'unicode',
         'wholeLogCategories' => array(
             'update_user_name'
         ),

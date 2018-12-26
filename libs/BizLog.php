@@ -31,6 +31,9 @@ class BizLog
     const LOG_TYPE_ERROR = 'error';
     const LOG_TYPE_DATA_CHANGE = 'change';
 
+    const LOG_FORMAT_JSON_UNICODE = 'unicode';
+    const LOG_FORMAT_JSON_UTF8 = 'utf8';
+
     // 日志配置,支持多个项目不同配置.
     private static $configs = array();
 
@@ -51,6 +54,8 @@ class BizLog
     private $mod = 20;
     // 日志文件扩展名.
     private $ext = 'log';
+    // 日志格式化之后的字符集,默认UTF8,建议保持默认,方便查看.
+    private $formatCode = self::LOG_FORMAT_JSON_UTF8;
     // 记录所有日志的日志类型,建议保持默认.
     private $wholeLogTypes = array(
         self::LOG_TYPE_ERROR,
@@ -211,7 +216,7 @@ class BizLog
             // 获取log存储的文件夹
             $logFile = self::getLogFile(intval($timeMicro));
 
-            $logDataJson = ArrayHelper::arrayToJsonFormat($logData);
+            $logDataJson = $this->getFormatData($logData);
 
             FileHelper::save($logDataJson, $logFile);
 
@@ -290,7 +295,7 @@ class BizLog
             'rand' => rand(1, 10000),
             'host' => gethostname()
         );
-        $id = md5(ArrayHelper::arrayToJsonFormat($list));
+        $id = md5($this->getFormatData($list));
 
         return $id;
     }
@@ -344,6 +349,15 @@ class BizLog
         $logFile .= "." . $this->ext;
 
         return $logFile;
+    }
+
+    protected function getFormatData($list)
+    {
+        if ($this->formatCode == self::LOG_FORMAT_JSON_UTF8) {
+            return ArrayHelper::arrayToJsonFormat($list);
+        } else {
+            return json_encode($list);
+        }
     }
 
 }
