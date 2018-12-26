@@ -1,0 +1,9 @@
+{
+  "name": "PHPHelper",
+  "description": "PHP帮助类",
+  "keywords": ["php", "helper"],
+  "homepage": "",
+  "support": {
+    "source": "https://github.com/chenfeng54321/PHPHelper"
+  }
+}

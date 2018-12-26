@@ -5,4 +5,4 @@
 /example -- 一些使用方法的demo.
 
 依赖的PHP扩展:
-使用数组转Json的功能时需要依赖扩展库: mb_string
+使用StringHelper::unicodeDecode时需要依赖扩展库: mb_string
