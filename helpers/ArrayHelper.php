@@ -8,6 +8,11 @@
 
 namespace PHPHelper\helpers;
 
+/**
+ * Class ArrayHelper,数组帮助类.
+ *
+ * @package PHPHelper\helpers
+ */
 class ArrayHelper
 {
     /**

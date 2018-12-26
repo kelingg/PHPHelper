@@ -1,11 +1,17 @@
 <?php
-
-namespace PHPHelper\helpers;
 /**
  * Created by PhpStorm.
  * User: guokeling
  * Date: 2018/12/10
  * Time: 19:14
+ */
+
+namespace PHPHelper\helpers;
+
+/**
+ * Class StringHelper,字符串处理帮助类.
+ *
+ * @package PHPHelper\helpers
  */
 class StringHelper
 {

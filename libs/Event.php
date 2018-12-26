@@ -8,6 +8,11 @@
 
 namespace PHPHelper\libs;
 
+/**
+ * Class Event,事件类.
+ *
+ * @package PHPHelper\libs
+ */
 class Event
 {
     protected static $events = array();

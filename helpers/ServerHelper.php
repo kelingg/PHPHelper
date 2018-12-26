@@ -1,12 +1,16 @@
 <?php
-
-namespace PHPHelper\helpers;
-
 /**
  * Created by PhpStorm.
  * User: guokeling
  * Date: 2018/12/10
  * Time: 19:11
+ */
+namespace PHPHelper\helpers;
+
+/**
+ * Class ServerHelper, 服务器信息帮助类.
+ *
+ * @package PHPHelper\helpers
  */
 class ServerHelper
 {

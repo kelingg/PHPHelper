@@ -9,6 +9,11 @@
 
 namespace PHPHelper\libs;
 
+/**
+ * Class ConsistentHash,一致性hash类
+ *
+ * @package PHPHelper\libs
+ */
 class ConsistentHash
 {
     // 节点hash之后的圆环列表.

@@ -8,6 +8,11 @@
 
 namespace PHPHelper\helpers;
 
+/**
+ * Class HashHelper, hash算法类.
+ *
+ * @package PHPHelper\helpers
+ */
 class HashHelper
 {
     /**

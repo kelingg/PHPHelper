@@ -9,7 +9,7 @@
 require_once __DIR__ . '/../Autoload.php';
 
 try {
-    $email = 'kelingg@163.com.';
+    $email = 'kelingg@163.com';
     $mobile = 18857872345;
     if(\PHPHelper\helpers\ValidateHelper::isEmail($email)) {
         echo $email . " is a valid email!\n";
