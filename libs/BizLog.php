@@ -45,7 +45,7 @@ class BizLog
     // 是否开启日志.
     private $isEnable = false;
     // 日志目录.
-    private $dir = '/home/logs/biz_log/' . self::APP_CODE_DEFAULT;
+    private $dir = '';
     // 日志文件前缀.
     private $prefix = 'biz_log';
     // 日志文件后缀,默认以天结尾,如20181212.
@@ -103,6 +103,10 @@ class BizLog
             }
         }
 
+        if(empty($this->dir)) {
+            $this->dir = '/home/logs/biz_log/' . self::APP_CODE_DEFAULT;
+        }
+
         if (!in_array($this->suffix, array(self::SUFFIX_TYPE_MONTH, self::SUFFIX_TYPE_DAY))) {
             $this->suffix = self::SUFFIX_TYPE_DAY;
         }
@@ -111,7 +115,6 @@ class BizLog
         if ($this->mod > 20) {
             $this->mod = 20;
         }
-
     }
 
     /**
