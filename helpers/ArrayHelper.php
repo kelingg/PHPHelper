@@ -76,9 +76,9 @@ class ArrayHelper
      * @param array $params
      * @return string
      */
-    public static function arrayToStringFormat($params = [])
+    public static function arrayToStringFormat($params = array())
     {
-        $return = [];
+        $return = array();
         if (!empty($params)) {
             if (is_array($params)) {
                 foreach ($params as $value) {
@@ -109,12 +109,12 @@ class ArrayHelper
      * @param array $rangeList
      * @return array
      */
-    public static function getNoOverlapRangeList($rangeList = [])
+    public static function getNoOverlapRangeList($rangeList = array())
     {
         if (empty($rangeList)) {
-            return [];
+            return array();
         }
-        $noOverlapRangeList = [];
+        $noOverlapRangeList = array();
         foreach ($rangeList as $item) {
             if (empty($noOverlapRangeList)) {
                 $noOverlapRangeList[] = $item;
@@ -148,7 +148,7 @@ class ArrayHelper
      * @param array $noOverlapRangeList
      * @return mixed
      */
-    public static function getEndByRangeList($start, $end, $noOverlapRangeList = [])
+    public static function getEndByRangeList($start, $end, $noOverlapRangeList = array())
     {
         if (empty($noOverlapRangeList)) {
             return $end;
