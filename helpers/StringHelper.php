@@ -37,7 +37,8 @@ class StringHelper
         $resultArray = array_filter($resultArray,
             function ($item) {
                 echo $item . "\n";
-                return !empty(trim($item));
+                $itemNew = trim($item);
+                return !empty($itemNew);
             }
         );
         $resultArray = array_unique($resultArray);   //去重
