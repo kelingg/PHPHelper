@@ -12,6 +12,7 @@ $configs = array(
         'isEnable' => true,
         'mod' => 1,
         'ext' => 'txt',
+        'mergeData' => true,
         'wholeLogCategories' => array(
             'update_user_name'
         ),

@@ -54,6 +54,8 @@ class BizLog
     private $mod = 20;
     // 日志文件扩展名.
     private $ext = 'log';
+    // 将requestData和resultData合并为data.
+    private $mergeData = false;
     // 日志格式化之后的字符集,默认UTF8,建议保持默认,方便查看.
     private $formatCode = self::LOG_FORMAT_JSON_UTF8;
     // 记录所有日志的日志类型,建议保持默认.
@@ -115,6 +117,19 @@ class BizLog
         if ($this->mod > 20) {
             $this->mod = 20;
         }
+    }
+
+    public static function trace($message, $target, $category, $requestData, $result = '', $params = array())
+    {
+        return self::trackLog($message, $target, $category, $requestData, $result, $params);
+    }
+    public static function error($message, $target = null, $category, $requestData, $result, $code = 0, $params = array())
+    {
+        return self::errorLog($message, $target, $category, $requestData, $result, $code, $params);
+    }
+    public static function change($message, $target, $category, $changeData, $requestData = '', $params = array())
+    {
+        return self::dataChangeLog($message, $target, $category, $changeData, $requestData, $params);
     }
 
     /**
@@ -199,8 +214,12 @@ class BizLog
             $logData['category'] = $category;
             $logData['code'] = ArrayHelper::getValue($params, 'code', 0);
             $logData['type'] = ArrayHelper::getValue($params, 'type', '');
-            $logData['request_data'] = $requestData;
-            $logData['result_data'] = $resultData;
+            if($this->mergeData) {
+                $logData['data'] = array('request' => $requestData, 'result' => $resultData);
+            } else {
+                $logData['request_data'] = $requestData;
+                $logData['result_data'] = $resultData;
+            }
 
             $logData['username'] = ArrayHelper::getValue($params, 'username', 'system');
             $logData['username_full'] = ArrayHelper::getValue($params, 'username_full', 'system');
