@@ -214,13 +214,6 @@ class BizLog
             $logData['category'] = $category;
             $logData['code'] = ArrayHelper::getValue($params, 'code', 0);
             $logData['type'] = ArrayHelper::getValue($params, 'type', '');
-            if($this->mergeData) {
-                $logData['data'] = array('request' => $requestData, 'result' => $resultData);
-            } else {
-                $logData['request_data'] = $requestData;
-                $logData['result_data'] = $resultData;
-            }
-
             $logData['username'] = ArrayHelper::getValue($params, 'username', 'system');
             $logData['username_full'] = ArrayHelper::getValue($params, 'username_full', 'system');
 
@@ -231,6 +224,17 @@ class BizLog
             $ipAddress = ArrayHelper::getValue($params, 'ip_address', @ServerHelper::getClientIp());
             $ipAddress = empty($ipAddress) ? gethostname() : $ipAddress;
             $logData['client_ip'] = $ipAddress;
+
+            if ($this->mergeData) {
+                $logData['data'] = array('request' => $requestData, 'result' => $resultData);
+                $logData['logtime'] = $logData['log_time'];
+                $logData['logtime_micro'] = $logData['log_time_micro'];
+                $logData['ip_address'] = $logData['client_ip'];
+            } else {
+                $logData['request_data'] = $requestData;
+                $logData['result_data'] = $resultData;
+            }
+
 
             $logData['query_key'] = implode('_', array($logData['target'], $logData['category'], $logData['type'], $logData['code']));
             $logData['id'] = self::generateId($logData);
