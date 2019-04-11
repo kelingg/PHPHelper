@@ -119,17 +119,65 @@ class BizLog
         }
     }
 
+    /**
+     * 跟踪日志简化方法名.
+     *
+     * @param        $message
+     * @param        $target
+     * @param        $category
+     * @param        $requestData
+     * @param string $result
+     * @param array  $params
+     * @return bool
+     */
     public static function trace($message, $target, $category, $requestData, $result = '', $params = array())
     {
         return self::trackLog($message, $target, $category, $requestData, $result, $params);
     }
+
+    /**
+     * 错误日志简化方法名.
+     *
+     * @param       $message
+     * @param null  $target
+     * @param       $category
+     * @param       $requestData
+     * @param       $result
+     * @param int   $code
+     * @param array $params
+     * @return bool
+     */
     public static function error($message, $target = null, $category, $requestData, $result, $code = 0, $params = array())
     {
         return self::errorLog($message, $target, $category, $requestData, $result, $code, $params);
     }
+
+    /**
+     * 数据变更日志简化方法名.
+     *
+     * @param        $message
+     * @param        $target
+     * @param        $category
+     * @param        $changeData
+     * @param string $requestData
+     * @param array  $params
+     * @return bool
+     */
     public static function change($message, $target, $category, $changeData, $requestData = '', $params = array())
     {
         return self::dataChangeLog($message, $target, $category, $changeData, $requestData, $params);
+    }
+
+    /**
+     * 记录数据日志,不做过多处理.
+     *
+     * @param array  $logData
+     * @param string $appCode
+     * @return bool
+     */
+    public static function data($logData = array(), $appCode = self::APP_CODE_DEFAULT)
+    {
+        return self::getInstance($appCode)->simpleLog($logData);
     }
 
     /**
@@ -238,6 +286,35 @@ class BizLog
 
             $logData['query_key'] = implode('_', array($logData['target'], $logData['category'], $logData['type'], $logData['code']));
             $logData['id'] = self::generateId($logData);
+
+            // 获取log存储的文件夹
+            $logFile = self::getLogFile(intval($timeMicro));
+
+            $logDataJson = $this->getFormatData($logData);
+
+            FileHelper::save($logDataJson, $logFile);
+
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+
+        return true;
+    }
+
+    /**
+     * 将数据保存在规定路径.
+     *
+     * @param mixed   $logData
+     * @return bool
+     */
+    protected function simpleLog($logData = array())
+    {
+        try {
+            if(!isset($logData['id'])) {
+                $logData['id'] = self::generateId($logData);
+            }
+
+            $timeMicro = microtime(true);
 
             // 获取log存储的文件夹
             $logFile = self::getLogFile(intval($timeMicro));

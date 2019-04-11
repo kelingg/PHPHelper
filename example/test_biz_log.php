@@ -33,6 +33,13 @@ $configs = array(
             123,
             124
         ),
+    ),
+    'UserDevice' => array(
+        'isEnable' => true,
+        'dir' => '/home/logs/biz_log/user_device',
+        'mod' => 5,
+        'formatCode' => 'unicode',
+        'prefix' => 'device_log'
     )
 );
 
@@ -51,4 +58,10 @@ var_dump($result);
 echo "data_change_log: \n";
 $changeData = array('id' => 123, 'origin_username' => 'aaa', 'username' => 'abc');
 $result = \PHPHelper\libs\BizLog::dataChangeLog('请求改名处理完成', 123, 'update_user_name', $changeData, $requestData, array('appCode' => 'userInfo'));
+var_dump($result);
+
+
+echo "data_log: \n";
+$logData = array('device_id' => 'sadfl234213lkwjeq', 'city' => 'BeiJing', 'app_list' => 'tm,tb,jd,jm');
+$result = \PHPHelper\libs\BizLog::data($logData, 'UserDevice');
 var_dump($result);
