@@ -8,50 +8,61 @@
 
 namespace PHPHelper\libs;
 
-class Number128 {
+class Number128
+{
     private $lowValue;
     private $highValue;
 
-    public function __construct($lowValue, $highValue) {
+    public function __construct($lowValue, $highValue)
+    {
         $this->lowValue = $lowValue;
         $this->highValue = $highValue;
     }
 
-    public function getLowValue() {
-            return $this->lowValue;
-        }
+    public function getLowValue()
+    {
+        return $this->lowValue;
+    }
 
-    public function getHighValue() {
+    public function getHighValue()
+    {
         return $this->highValue;
     }
 
-    public function setLowValue($lowValue) {
+    public function setLowValue($lowValue)
+    {
         $this->lowValue = $lowValue;
     }
 
-    public function setHighValue($hiValue) {
+    public function setHighValue($hiValue)
+    {
         $this->highValue = $hiValue;
     }
 
-    public function getLongArray() {
+    public function getLongArray()
+    {
         return array($this->lowValue, $this->highValue);
     }
 }
 
-class OrderIter {
+class OrderIter
+{
     private static $IS_LITTLE_ENDIAN = True;
     private $size;
     private $index = 0;
 
-    public function __construct($size) {
+    public function __construct($size)
+    {
         $this->size = $size;
     }
 
-    public function hasNext() {
+    public function hasNext()
+    {
         return $this->index < $this->size;
     }
 
-    public function next() {
+    public function next()
+    {
         if (self::$IS_LITTLE_ENDIAN) {
             $var10002 = $this->index;
             $var10000 = $var10002;
@@ -104,7 +115,8 @@ class CityHash
      * @param int $num
      * @return int
      */
-    public static function overflowLong($value, $num = 64) {
+    public static function overflowLong($value, $num = 64)
+    {
         $max_int = bcsub(bcpow(2, $num - 1), 1);
         $int_span = bcpow(2, $num);
         $min_int = bcsub(bcadd($max_int, 1), $int_span);
@@ -125,7 +137,8 @@ class CityHash
      *
      * @return int
      */
-    public static function smartMul(){
+    public static function smartMul()
+    {
         $args = func_get_args();
         if (count($args) <= 0) {
             return 0;
@@ -137,7 +150,7 @@ class CityHash
                 return 0;
             }
         }
-        if(count($args) == 2){
+        if (count($args) == 2) {
             return self::overflowLong(bcmul($args[0], $args[1]));
         } else {
             $last = array_pop($args);
@@ -150,7 +163,8 @@ class CityHash
      *
      * @return int
      */
-    public static function smartMul32(){
+    public static function smartMul32()
+    {
         $args = func_get_args();
         if (count($args) <= 0) {
             return 0;
@@ -162,7 +176,7 @@ class CityHash
                 return 0;
             }
         }
-        if(count($args) == 2){
+        if (count($args) == 2) {
             return self::overflowLong(bcmul($args[0], $args[1]), 32);
         } else {
             $last = array_pop($args);
@@ -201,7 +215,8 @@ class CityHash
      *
      * @return int
      */
-    public static function smartAdd32(){
+    public static function smartAdd32()
+    {
         $args = func_get_args();
         if (count($args) <= 0) {
             return 0;
@@ -213,7 +228,7 @@ class CityHash
                 return 0;
             }
         }
-        if(count($args) == 2){
+        if (count($args) == 2) {
             return self::overflowLong(bcadd($args[0], $args[1]), 32);
         } else {
             $last = array_pop($args);
@@ -238,12 +253,12 @@ class CityHash
         } else {
             $x = decbin($a);
             $len = strlen($x);
-            if($len>$maxSize) {
-                $x = substr($x,($len - $maxSize), $maxSize);
+            if ($len > $maxSize) {
+                $x = substr($x, ($len - $maxSize), $maxSize);
             } elseif ($len < $maxSize) {
                 $x = str_repeat('0', ($maxSize - $len)) . $x;
             }
-            $x = str_repeat('0', $b).substr($x, 0, $maxSize - $b);
+            $x = str_repeat('0', $b) . substr($x, 0, $maxSize - $b);
             return bindec($x);
         }
     }
@@ -253,16 +268,19 @@ class CityHash
         return self::uRShift($a, $b, 32);
     }
 
-    public static function reverseBytesInt($i) {
+    public static function reverseBytesInt($i)
+    {
         return self::overflowLong($i << 24, 32) | self::overflowLong(($i & 65280) << 8, 32) | self::uRShift32($i, 8) & 65280 | self::uRShift32($i, 24);
     }
 
-    public static function reverseBytesLong($i) {
+    public static function reverseBytesLong($i)
+    {
         $i = ($i & 71777214294589695) << 8 | self::uRShift($i, 8) & 71777214294589695;
         return $i << 48 | ($i & 4294901760) << 16 | self::uRShift($i, 16) & 4294901760 | self::uRShift($i, 48);
     }
 
-    public static function hash32($data) {
+    public static function hash32($data)
+    {
         $len = count($data);
         if ($len <= 24) {
             return $len <= 12 ? ($len <= 4 ? self::hash32Len0to4($data) : self::hash32Len5to12($data)) : self::hash32Len13to24($data);
@@ -329,7 +347,7 @@ class CityHash
                 $h = $swapValue;
                 $pos += 20;
                 --$iters;
-            } while($iters > 0);
+            } while ($iters > 0);
 
             $g = self::smartMul32(self::rotate32($g, 11), -862048943);
             $g = self::smartMul32(self::rotate32($g, 17), -862048943);
@@ -344,11 +362,12 @@ class CityHash
             return $h;
         }
     }
-    
-    public static function hash64($data) {
+
+    public static function hash64($data)
+    {
         $len = count($data);
         if ($len <= 32) {
-            if($len<=16){
+            if ($len <= 16) {
                 return self::hashLen0to16($data);
             } else {
                 return self::hashLen17to32($data);
@@ -384,7 +403,7 @@ class CityHash
                 $z = $swapValue;
                 $pos += 64;
                 $len -= 64;
-            } while($len != 0);
+            } while ($len != 0);
             $hvwl = self::hashLen16($v->getLowValue(), $w->getLowValue());
             $smy1 = self::smartMul(self::shiftMix($y), -5435081209227447693);
             $hvwh = self::hashLen16($v->getHighValue(), $w->getHighValue());
@@ -393,24 +412,29 @@ class CityHash
         }
     }
 
-    public static function hash64BySeed($data, $seed) {
+    public static function hash64BySeed($data, $seed)
+    {
         return self::hash64BySeed2($data, -7286425919675154353, $seed);
     }
 
-    public static function hash64BySeed2($data, $seed0, $seed1) {
+    public static function hash64BySeed2($data, $seed0, $seed1)
+    {
         return self::hashLen16(self::hash64($data) - $seed0, $seed1);
     }
 
-    public static function hash128($data) {
+    public static function hash128($data)
+    {
         $len = count($data);
         return $len >= 16 ? self::hash128BySeedAndStart($data, 16, new Number128(self::fetch64($data, 0), self::smartAdd(self::fetch64($data, 8), -4348849565147123417))) : self::hash128BySeedAndStart($data, 0, new Number128(-4348849565147123417, -5435081209227447693));
     }
 
-    public static function hash128BySeed($data, Number128 $seed) {
+    public static function hash128BySeed($data, Number128 $seed)
+    {
         return self::hash128BySeedAndStart($data, 0, $seed);
     }
 
-    private static function hash128BySeedAndStart($byteArray, $start,Number128 $seed) {
+    private static function hash128BySeedAndStart($byteArray, $start, Number128 $seed)
+    {
         $len = count($byteArray) - $start;
         if ($len < 128) {
             return self::cityMurmur(self::copyOfRange($byteArray, $start, count($byteArray)), $seed);
@@ -447,7 +471,7 @@ class CityHash
                 $z = $swapValue;
                 $pos += 64;
                 $len -= 128;
-            } while($len >= 128);
+            } while ($len >= 128);
 
             $x = self::smartAdd($x, self::smartMul(self::rotate(self::smartAdd($v->getLowValue(), $swapValue), 49), -4348849565147123417));
             $y = self::smartAdd(self::smartMul($y, -4348849565147123417), self::rotate($w->getHighValue(), 37));
@@ -455,7 +479,7 @@ class CityHash
             $w->setLowValue(self::smartMul($w->getLowValue(), 9));
             $v->setLowValue(self::smartMul($v->getLowValue(), -4348849565147123417));
             $tail_done = 0;
-            while($tail_done < $len) {
+            while ($tail_done < $len) {
                 $tail_done += 32;
                 $y = self::smartAdd(self::smartMul(self::rotate(self::smartAdd($x, $y), 42), -4348849565147123417), $v->getHighValue());
                 $w->setLowValue(self::smartAdd($w->getLowValue(), self::fetch64($byteArray, $pos + $len - $tail_done + 16)));
@@ -471,16 +495,17 @@ class CityHash
             return new Number128(self::smartAdd(self::hashLen16(self::smartAdd($x, $v->getHighValue()), $w->getHighValue()), $y), self::hashLen16(self::smartAdd($x, $w->getHighValue()), self::smartAdd($y, $v->getHighValue())));
         }
     }
-    
-    private static function hash32Len0to4($byteArray) {
+
+    private static function hash32Len0to4($byteArray)
+    {
         $b = 0;
         $c = 9;
         $len = count($byteArray);
         $var4 = $byteArray;
         $var5 = count($byteArray);
 
-        for($var6 = 0; $var6 < $var5; ++$var6) {
-        $v = $var4[$var6];
+        for ($var6 = 0; $var6 < $var5; ++$var6) {
+            $v = $var4[$var6];
             $b = self::smartAdd32(self::smartMul32($b, -862048943), $v);
             $c ^= $b;
         }
@@ -488,7 +513,8 @@ class CityHash
         return self::fmix(self::mur($b, self::mur($len, $c)));
     }
 
-    private static function hash32Len5to12($byteArray) {
+    private static function hash32Len5to12($byteArray)
+    {
         $len = count($byteArray);
         $b = self::smartMul32($len, 5);
         $c = 9;
@@ -499,7 +525,8 @@ class CityHash
         return self::fmix(self::mur($c, self::mur($b, self::mur($a, $d))));
     }
 
-    private static function hash32Len13to24($byteArray) {
+    private static function hash32Len13to24($byteArray)
+    {
         $len = count($byteArray);
         $a = self::fetch32($byteArray, (self::uRShift32($len, 1)) - 4);
         $b = self::fetch32($byteArray, 4);
@@ -510,7 +537,8 @@ class CityHash
         return self::fmix(self::mur($f, self::mur($e, self::mur($d, self::mur($c, self::mur($b, self::mur($a, $len)))))));
     }
 
-    private static function hashLen0to16($byteArray) {
+    private static function hashLen0to16($byteArray)
+    {
         $len = count($byteArray);
         if ($len >= 8) {
             $mul = -7286425919675154353 + ($len * 2);
@@ -538,7 +566,8 @@ class CityHash
         }
     }
 
-    private static function hashLen17to32($byteArray) {
+    private static function hashLen17to32($byteArray)
+    {
         $len = count($byteArray);
         $mul = -7286425919675154353 + ($len * 2);
         $a = self::smartMul(self::fetch64($byteArray, 0), -5435081209227447693);
@@ -551,7 +580,8 @@ class CityHash
         return self::hashLen16ByMul($abcd, $abc, $mul);
     }
 
-    private static function hashLen33to64($byteArray) {
+    private static function hashLen33to64($byteArray)
+    {
         $len = count($byteArray);
         $mul = -7286425919675154353 + ($len * 2);
         $a = self::smartMul(self::fetch64($byteArray, 0), -7286425919675154353);
@@ -580,9 +610,10 @@ class CityHash
         return self::smartAdd($b, $x);
     }
 
-    private static function loadUnaligned64($byteArray, $start) {
+    private static function loadUnaligned64($byteArray, $start)
+    {
         $result = 0;
-        for($orderIter = new OrderIter(8); $orderIter->hasNext(); $result |= $value) {
+        for ($orderIter = new OrderIter(8); $orderIter->hasNext(); $result |= $value) {
             $next = $orderIter->next();
             $value = ($byteArray[$next + $start] & 255) << $next * 8;
         }
@@ -590,9 +621,10 @@ class CityHash
         return $result;
     }
 
-    private static function loadUnaligned32($byteArray, $start) {
+    private static function loadUnaligned32($byteArray, $start)
+    {
         $result = 0;
-        for($orderIter = new OrderIter(4); $orderIter->hasNext(); $result |= $value) {
+        for ($orderIter = new OrderIter(4); $orderIter->hasNext(); $result |= $value) {
             $next = $orderIter->next();
             $value = ($byteArray[$next + $start] & 255) << $next * 8;
         }
@@ -600,23 +632,28 @@ class CityHash
         return $result;
     }
 
-    private static function fetch64($byteArray, $start) {
+    private static function fetch64($byteArray, $start)
+    {
         return self::loadUnaligned64($byteArray, $start);
     }
 
-    private static function fetch32($byteArray, $start) {
+    private static function fetch32($byteArray, $start)
+    {
         return self::loadUnaligned32($byteArray, $start);
     }
 
-    private static function rotate($val, $shift) {
+    private static function rotate($val, $shift)
+    {
         return $shift == 0 ? $val : self::uRShift($val, $shift) | self::overflowLong($val << 64 - $shift, 64);
     }
 
-    private static function rotate32($val, $shift) {
+    private static function rotate32($val, $shift)
+    {
         return $shift == 0 ? $val : self::uRShift32($val, $shift) | self::overflowLong($val << 32 - $shift, 32);
     }
 
-    private static function hashLen16ByMul($u, $v, $mul) {
+    private static function hashLen16ByMul($u, $v, $mul)
+    {
         $a = self::smartMul(($u ^ $v), $mul);
         $a ^= self::uRShift($a, 47);
         $b = self::smartMul(($v ^ $a), $mul);
@@ -625,11 +662,13 @@ class CityHash
         return $b;
     }
 
-    private static function hashLen16($u, $v) {
+    private static function hashLen16($u, $v)
+    {
         return self::hash128to64(new Number128($u, $v));
     }
 
-    private static function hash128to64(Number128 $number128) {
+    private static function hash128to64(Number128 $number128)
+    {
         $lhv = $number128->getLowValue() ^ $number128->getHighValue();
         $a = self::smartMul($lhv, -7070675565921424023);
         $a ^= self::uRShift($a, 47);
@@ -639,11 +678,13 @@ class CityHash
         return $b;
     }
 
-    private static function shiftMix($val) {
+    private static function shiftMix($val)
+    {
         return $val ^ self::uRShift($val, 47);
     }
 
-    private static function fmix($h) {
+    private static function fmix($h)
+    {
         $h ^= self::uRShift32($h, 16);
         $h = self::smartMul32($h, -2048144789);
         $h ^= self::uRShift32($h, 13);
@@ -652,7 +693,8 @@ class CityHash
         return $h;
     }
 
-    private static function mur($a, $h) {
+    private static function mur($a, $h)
+    {
         $a = self::smartMul32($a, -862048943);
         $a = self::rotate32($a, 17);
         $a = self::smartMul32($a, 461845907);
@@ -661,7 +703,8 @@ class CityHash
         return self::smartAdd32(self::smartMul32($h, 5), -430675100);
     }
 
-    private static function weakHashLen32WithSeedsByXYZ($w, $x, $y, $z, $a, $b) {
+    private static function weakHashLen32WithSeedsByXYZ($w, $x, $y, $z, $a, $b)
+    {
         $a = self::smartAdd($a, $w);
         $baz = self::smartAdd($b, $a, $z);
         $b = self::rotate($baz, 21);
@@ -672,11 +715,13 @@ class CityHash
         return new Number128(self::smartAdd($a, $z), self::smartAdd($b, $c));
     }
 
-    private static function weakHashLen32WithSeeds($byteArray, $start, $a, $b) {
+    private static function weakHashLen32WithSeeds($byteArray, $start, $a, $b)
+    {
         return self::weakHashLen32WithSeedsByXYZ(self::fetch64($byteArray, $start), self::fetch64($byteArray, $start + 8), self::fetch64($byteArray, $start + 16), self::fetch64($byteArray, $start + 24), $a, $b);
     }
 
-    private static function cityMurmur($byteArray, Number128 $seed) {
+    private static function cityMurmur($byteArray, Number128 $seed)
+    {
         $len = count($byteArray);
         $a = $seed->getLowValue();
         $b = $seed->getHighValue();
@@ -700,7 +745,7 @@ class CityHash
                 $d ^= $c;
                 $pos += 16;
                 $l -= 16;
-            } while($l > 0);
+            } while ($l > 0);
         }
 
         $a = self::hashLen16($a, $c);
