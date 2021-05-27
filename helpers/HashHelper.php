@@ -7,6 +7,7 @@
  */
 
 namespace PHPHelper\helpers;
+use PHPHelper\libs\CityHash;
 
 /**
  * Class HashHelper, hash算法类.
@@ -34,6 +35,18 @@ class HashHelper
         }
 
         return $hash & 0x7FFFFFFF;
+    }
+
+    /**
+     * 按照CityHash32计算hash值.
+     *
+     * @param string $str
+     * @return int
+     */
+    public static function getHashByCity32($str = '')
+    {
+        $bytes = StringHelper::getBytes($str);
+        return CityHash::hash32($bytes) & 0x0FFFFFFFF;
     }
 
 }

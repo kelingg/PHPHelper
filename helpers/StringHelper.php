@@ -162,4 +162,19 @@ class StringHelper
         return '<pre>' . $string . '</pre>';
     }
 
+    /**
+     * 将字符串转换为byte数组.
+     *
+     * @param $string
+     * @return array
+     */
+    public static function getBytes($string)
+    {
+        $bytes = array();
+        for ($i = 0; $i < strlen($string); $i++) {
+            $bytes[] = ord($string[$i]);
+        }
+        return $bytes;
+    }
+
 }
