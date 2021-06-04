@@ -244,8 +244,11 @@ class CityHash
      * @param int $maxSize
      * @return int|number
      */
-    public static function uRShift($a, $b, $maxSize = 8 * PHP_INT_SIZE)
+    public static function uRShift($a, $b, $maxSize = null)
     {
+        if (is_null($maxSize)) {
+            $maxSize = 8 * PHP_INT_SIZE;
+        }
         if ($b == 0) {
             return $a;
         } elseif ($a >= 0) {
